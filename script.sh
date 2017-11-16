@@ -11,5 +11,8 @@ then
     echo "Version:" $varversion
 
     mkdir ./$varname
+    FILE=$PWD/$varname
+    echo $FILE
 else
     echo "Project with that name already exists"
+fi
