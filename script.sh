@@ -1,4 +1,18 @@
 #!/usr/bin/env bash
+usage="$(basename "$0") [-h] -- script to set up a project structure
+
+where:
+    -h  show this help text"
+
+while getopts ':hs:' option; do
+  case "$option" in
+    h) echo "$usage"
+       exit
+       ;;
+  esac
+done
+shift $((OPTIND - 1))
+
 read -p 'Project name: ' varname
 
 if [ ! -d "$varname" ]
