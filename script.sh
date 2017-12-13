@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # HELP MESSAGE
 usage="$(basename "$0") [-h] [--help] -- script to set up a project structure
@@ -33,13 +33,9 @@ make_structure ()
     echo "Creating $ROOT project..."
     echo  "$PACKAGE"
 
-    # WORDS=()
-    # for i in $(echo "$PACKAGE" | tr "." "\n")
-    # do
-    #  WORDS+=("$i")
-    # done
+    IFS=. components=$PACKAGE
 
-    # echo ${WORDS[@]}
+    echo ${components}
 
     mkdir ./$ROOT
     FILE=$PWD/$ROOT
@@ -51,17 +47,35 @@ make_info_file ()
     # Creates a project file with information passed during initialization
     # In form of YAML
 
+    DATE=`date '+%Y-%m-%d %H:%M:%S'`
+
     echo "project-name: $1
 author: $2
 version: $3
 package: $4
+creation-date: $DATE
     " >> $varname/project.yaml
 }
 
-read -p 'Project name: ' varname
+varname=""
+varuser=""
+varversion=""
+varpackage=""
 
-if [ ! -d "$varname" ]
-then
+while [[ "${varname}" = "" ]]; do
+    read -p 'Project name: ' varname
+
+    if [ -d "$varname" ]
+    then
+        echo "Project with that name already exists"
+        varname=""
+    fi
+done
+
+#read -p 'Project name: ' varname
+
+#if [ ! -d "$varname" ]
+#then
     read -p 'Author: ' varuser
 
     read -p 'version(default: 0.0.1): ' varversion
@@ -74,6 +88,6 @@ then
 
     make_structure $varname $varpackage
     make_info_file $varname $varuser $varversion $varpackage
-else
-    echo "Project with that name already exists"
+#else
+#    echo "Project with that name already exists"
 fi
