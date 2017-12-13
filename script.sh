@@ -72,22 +72,29 @@ while [[ "${varname}" = "" ]]; do
     fi
 done
 
-#read -p 'Project name: ' varname
-
-#if [ ! -d "$varname" ]
-#then
+while [[ "${varuser}" = "" ]]; do
     read -p 'Author: ' varuser
+done
 
-    read -p 'version(default: 0.0.1): ' varversion
+while [[ "${varpackage}" = "" ]]; do
     read -p 'package name(domain): ' varpackage
 
-    echo "Are the params correct?"
-    echo "Project name: " $varname
-    echo "Author:" $varuser
-    echo "Version:" $varversion
+    if [[ "${varpackage}" =~ "^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$" ]];
+    then
+        echo "Correct"
+    else
+        echo "Incorrect domain, try again."
+        varpackage=""
+    fi
+done
 
-    make_structure $varname $varpackage
-    make_info_file $varname $varuser $varversion $varpackage
-#else
-#    echo "Project with that name already exists"
-fi
+read -p 'version(default: 0.0.1): ' varversion
+
+echo "Entered data, please verify:"
+echo "Project name: " $varname
+echo "Author:" $varuser
+echo "Version:" $varversion
+echo "Package:" $varpackage
+
+make_structure $varname $varpackage
+make_info_file $varname $varuser $varversion $varpackage
