@@ -46,6 +46,18 @@ make_structure ()
     echo $FILE
 }
 
+make_info_file ()
+{
+    # Creates a project file with information passed during initialization
+    # In form of YAML
+
+    echo "project-name: $1
+author: $2
+version: $3
+package: $4
+    " >> $varname/project.yaml
+}
+
 read -p 'Project name: ' varname
 
 if [ ! -d "$varname" ]
@@ -61,6 +73,7 @@ then
     echo "Version:" $varversion
 
     make_structure $varname $varpackage
+    make_info_file $varname $varuser $varversion $varpackage
 else
     echo "Project with that name already exists"
 fi
