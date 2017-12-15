@@ -10,12 +10,14 @@ where:
     newly created project structure:
     - project name - this is going to be the root folder name
     - author - will be saved in a proper file(Not Yet Implemented)
-    - programming language -
-    - version - default is set as 0.0.1, user can change it
-                by providing new version(Not Yet Implemented)
+    - programming language - defines language of the project
+    - version - version of the project
     - package name - should be written in domain format, i.e. your.company.com.
                 This is used later as a folder and a group name
-    - description"
+    - description - adds simple description of the project
+
+Additionally, all above data is stored in project.yaml file
+in root folder of a newly created project"
 
 # DISPLAY HELP MESSAGE
 while getopts ':hs:' option; do
@@ -27,6 +29,7 @@ while getopts ':hs:' option; do
 done
 shift $((OPTIND - 1))
 
+# Function responsible for creating structure based on provided data
 make_structure ()
 {
     ROOT=$1
@@ -62,10 +65,11 @@ creation-date: $DATE
     " >> $varname/project.yaml
 }
 
+# Collecting information about new project
 varname=""
 varuser=""
 varlang=""
-varversion=""
+varversion="0.0.1"
 varpackage=""
 vardesc=""
 
@@ -98,7 +102,7 @@ while [[ "${varpackage}" = "" ]]; do
 done
 
 while [[ "${varversion}" = "" ]]; do
-    read -p 'version(default: 0.0.1): ' varversion
+    read -p 'version: ' varversion
 
     if [[ "$varversion" != *"."* ]];
     then
@@ -116,6 +120,7 @@ version: $varversion
 package: $varpackage
 description: $vardesc"
 
+# Verification of provided data
 echo
 echo "Entered data, please verify: "
 echo "$CONTENT"
