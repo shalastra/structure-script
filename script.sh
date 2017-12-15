@@ -29,6 +29,7 @@ make_structure ()
 {
     ROOT=$1
     PACKAGE=$2
+    DESCRIPTION=$3
 
     echo "Creating $ROOT project..."
     echo  "$PACKAGE"
@@ -37,7 +38,7 @@ make_structure ()
 
     echo ${components}
 
-    mkdir ./$ROOT
+    mkdir -p ./$ROOT/src/main/$DESCRIPTION ./$ROOT/src/test/$DESCRIPTION
     FILE=$PWD/$ROOT
     echo $FILE
 }
@@ -47,20 +48,20 @@ make_info_file ()
     # Creates a project file with information passed during initialization
     # In form of YAML
 
+    CONTENT=$1
     DATE=`date '+%Y-%m-%d %H:%M:%S'`
 
-    echo "project-name: $1
-author: $2
-version: $3
-package: $4
+    echo "$CONTENT
 creation-date: $DATE
     " >> $varname/project.yaml
 }
 
 varname=""
 varuser=""
+varlang=""
 varversion=""
 varpackage=""
+vardesc=""
 
 while [[ "${varname}" = "" ]]; do
     read -p 'Project name: ' varname
@@ -74,6 +75,10 @@ done
 
 while [[ "${varuser}" = "" ]]; do
     read -p 'Author: ' varuser
+done
+
+while [[ "${varlang}" = "" ]]; do
+    read -p 'Programming language: ' varlang
 done
 
 while [[ "${varpackage}" = "" ]]; do
@@ -96,11 +101,24 @@ while [[ "${varversion}" = "" ]]; do
     fi
 done
 
-echo "Entered data, please verify:"
-echo "Project name: " $varname
-echo "Author:" $varuser
-echo "Version:" $varversion
-echo "Package:" $varpackage
+read -p 'Project description: ' vardesc
 
-make_structure $varname $varpackage
-make_info_file $varname $varuser $varversion $varpackage
+CONTENT="project-name: $varname
+author: $varuser
+programming-language: $varlang
+version: $varversion
+package: $varpackage
+description: $vardesc"
+
+echo
+echo "Entered data, please verify: "
+echo "$CONTENT"
+read -p "Is the data correct?[Y/N] " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    make_structure $varname $varpackage $varlang
+    make_info_file "$CONTENT"
+else
+    echo "Data is incorrect, please run script again."
+fi
