@@ -10,10 +10,12 @@ where:
     newly created project structure:
     - project name - this is going to be the root folder name
     - author - will be saved in a proper file(Not Yet Implemented)
+    - programming language -
     - version - default is set as 0.0.1, user can change it
                 by providing new version(Not Yet Implemented)
     - package name - should be written in domain format, i.e. your.company.com.
-                This is used later as a folder and a group name"
+                This is used later as a folder and a group name
+    - description"
 
 # DISPLAY HELP MESSAGE
 while getopts ':hs:' option; do
@@ -29,16 +31,20 @@ make_structure ()
 {
     ROOT=$1
     PACKAGE=$2
-    DESCRIPTION=$3
+    LANGUAGE=$3
 
     echo "Creating $ROOT project..."
-    echo  "$PACKAGE"
 
-    IFS=. components=$PACKAGE
+    REVERT_PACK=""
 
-    echo ${components}
+    IFS=. read -ra line <<< "$PACKAGE"
+    let x=${#line[@]}-1;
+    while [ "$x" -ge 0 ]; do
+          REVERT_PACK+="/${line[$x]}";
+          let x--;
+    done
 
-    mkdir -p ./$ROOT/src/main/$DESCRIPTION ./$ROOT/src/test/$DESCRIPTION
+    mkdir -p ./$ROOT/src/main/$LANGUAGE$REVERT_PACK ./$ROOT/src/test/$LANGUAGE$REVERT_PACK
     FILE=$PWD/$ROOT
     echo $FILE
 }
