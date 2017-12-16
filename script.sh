@@ -47,8 +47,8 @@ make_structure ()
           let x--;
     done
 
-    mkdir -p ./$ROOT/src/main/$LANGUAGE$REVERT_PACK ./$ROOT/src/test/$LANGUAGE$REVERT_PACK
-    FILE=$PWD/$ROOT
+    mkdir -p ./"$ROOT"/src/main/$LANGUAGE$REVERT_PACK ./"$ROOT"/src/test/$LANGUAGE$REVERT_PACK
+    FILE=$PWD/"$ROOT"
     echo $FILE
 }
 
@@ -62,14 +62,14 @@ make_info_file ()
 
     echo "$CONTENT
 creation-date: $DATE
-    " >> $varname/project.yaml
+    " >> "$varname"/project.yaml
 }
 
 # Collecting information about new project
 varname=""
 varuser=""
 varlang=""
-varversion="0.0.1"
+varversion=""
 varpackage=""
 vardesc=""
 
@@ -128,7 +128,7 @@ read -p "Is the data correct?[Y/N] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    make_structure $varname $varpackage $varlang
+    make_structure "$varname" "$varpackage" "$varlang"
     make_info_file "$CONTENT"
 else
     echo "Data is incorrect, please run script again."
