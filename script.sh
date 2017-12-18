@@ -94,7 +94,7 @@ done
 while [[ "${varpackage}" = "" ]]; do
     read -p 'package name(domain): ' varpackage
 
-    if [[ "$varpackage" != *"."* ]];
+    if ! [[ $varpackage =~ ^([a-z]+\.){0,2}(\*|[a-z]+)$ ]];
     then
         echo "Incorrect domain name, should be in format: xxx.xxx.xxx, try again."
         varpackage=""
@@ -104,7 +104,7 @@ done
 while [[ "${varversion}" = "" ]]; do
     read -p 'version: ' varversion
 
-    if [[ "$varversion" != *"."* ]];
+    if ! [[ $varversion =~ ^([0-9]+\.){0,2}(\*|[0-9]+)$ ]];
     then
         echo "Incorrect version format, should be xxx.xxx.xxx, try again."
         varversion=""
